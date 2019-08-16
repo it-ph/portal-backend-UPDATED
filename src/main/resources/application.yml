@@ -1,0 +1,41 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+  application:
+    name: portal
+  datasource:
+    url: jdbc:mysql://personivdb/portal
+    username: personivsu
+    password: 93rS0n1V2018!
+    driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf.cache: false
+  mail:
+    host: mail.personive.com
+    port: 587
+    username: "portal@personive.com"
+    password: "!welcome10"
+    properties: 
+     mail: 
+      debug: true
+      transport:
+        protocol: smtp
+      smtp: 
+        auth: true
+        starttls:
+          enable: true
+          required: true            
+    protocol: smtp  
+server:
+  port: 8081
+  servlet:
+    context-path: /portal
+
+jwt:
+  client: personiv-app
+  secret: 93$0n1V$3cr3T
+  expiration: 604800
+
+complaint-receiver: "paulo.cheung@personiv.com"
+

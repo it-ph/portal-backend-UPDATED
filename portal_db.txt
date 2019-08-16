@@ -1,0 +1,132 @@
+drop database if exists portal;
+create database portal;
+use portal;
+
+create table users(
+	id int primary key auto_increment not null,
+	fullName varchar(255) not null,
+	username varchar(255) unique not null,
+	password varchar(255) not null,
+	accountNonLocked tinyInt not null default 1,
+	accountNonExpired tinyInt not null default 1,
+	credentialsNonExpired tinyInt not null default 1,
+	enabled tinyInt not null default 1,
+	avatar varchar(255),
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+create table authorities(
+	username varchar(100) not null,
+	authority varchar(100),
+	createdAt datetime not null default current_timestamp,
+	updatedAt datetime,
+	foreign key(username) references users(username) 
+);
+
+
+
+create table apps(
+	id int auto_increment primary key not null,
+	app_name varchar(255) not null unique,
+	link varchar(255) not null unique,
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+create table posts(
+	id int primary key auto_increment not null,
+	user_id int not null,
+	post_comment text not null,
+	file_name varchar(255),
+	file_type varchar(100),
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime,
+	foreign key (user_id) references users(id)
+);
+
+create table post_reply(
+	id int primary key auto_increment not null,
+	user_id int not null,
+	post_id int not null, 
+	reply varchar(255) not null,
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	foreign key (user_id) references users(id),
+	foreign key (post_id) references posts(id)
+);
+
+create table newsletters(
+	id int primary key auto_increment not null,
+	caption varchar(255) not null,
+	file_name varchar(255),
+	file_type varchar(100),
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+create table slides(
+	id int primary key auto_increment not null,
+	caption varchar(255) not null,
+	file_name varchar(255) not null,
+	file_type varchar(100),
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+create table forms(
+	id int primary key auto_increment not null,
+	file_name varchar(255) unique not null,
+	file_type varchar(100),
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+
+create table aims(
+	id int auto_increment not null primary key,
+	fullname varchar(255) not null,
+	email varchar(255) not null,
+	scenario text not null,
+	aim text not null,
+	department varchar(255) not null,
+	createdAt dateTime not null default CURRENT_TIMESTAMP
+);
+
+create table aim_status(
+	id int auto_increment not null primary key,
+	aim_id int not null,
+	status enum('APPROVED','REJECTED','SUBJECT FOR REVIEW') default 'APPROVED',
+	remarks text not null,
+	foreign key (aim_id) references aims(id),
+	createdAt dateTime not null default CURRENT_TIMESTAMP
+);
+
+
+create table complaints(
+	id int auto_increment not null primary key,
+	sender varchar(255) not null,
+	message text not null,
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+create table links(
+	id int auto_increment not null primary key,
+	app varchar(255) not null,
+	location varchar(255) not null,
+	createdAt dateTime not null default CURRENT_TIMESTAMP,
+	updatedAt dateTime
+);
+
+INSERT INTO users(username,password,fullname)
+VALUES('jerico','$2a$10$Y1FwwGdxXr.yJc5sIUelHOVrBKVSyqRIzx2cK1whRhCSptizODH/6','Jerico Grijaldo');
+
+INSERT INTO authorities(username,authority) 
+VALUES('jerico','slides'),
+      ('jerico','complaints'),
+	  ('jerico','users'),
+	  ('jerico','newsletters'),
+	  ('jerico','aims'),
+	  ('jerico','apps'),
+	  ('jerico','forms');
+
